@@ -21,11 +21,19 @@ select @sal_deu = (select SaldoDeudor from Deudor where CodigoCliente = @num_cli
 update movimientos.CabeceraPedido set MontoTotal = MontoTotal + (@cant * @pre_uni) where NumPedido = @num_ped 
 IF (@lim_cred - @sal_deu) >= @cant * @pre_uni 
 BEGIN 
-update Deudor set SaldoDeudor = SaldoDeudor + (@cant * @pre_uni) where CodigoCliente = @num_cli 
+	update Deudor set SaldoDeudor = SaldoDeudor + (@cant * @pre_uni) where CodigoCliente = @num_cli 
+	IF EXISTS (SELECT * FROM dispositivos.TotalArticulos WHERE IdArticulo = @num_pro)
+	BEGIN
+		UPDATE dispositivos.TotalArticulos SET TotalPedidos = TotalPedidos+@cant WHERE IdArticulo = @num_pro
+	END
+	ELSE
+	BEGIN
+		INSERT INTO dispositivos.TotalArticulos VALUES (@num_pro,@cant)
+	END
 END 
 ELSE 
 BEGIN 
-ROLLBACK TRANSACTION 
+	ROLLBACK TRANSACTION 
 END
 GO
 SET QUOTED_IDENTIFIER ON
@@ -33,32 +41,24 @@ GO
 SET ANSI_NULLS ON
 GO
 CREATE   TRIGGER [movimientos].[TR_ProductoActualizado] 
-
 on [movimientos].[CuerpoPedido] for update 
-
 as 
-
 declare @pre_uni money, @cant int, @num_pro int, @num_pedi int 
-
 select @pre_uni = PrecioUnitario, @cant = Cantidad, @num_pro = NumProducto, @num_pedi = NumPedido from inserted 
-
 update movimientos.CabezaCuerpoP set PrecioUnitario = @pre_uni, Cantidad = @cant where NumPedido = @num_pedi and NumProducto = @num_pro
+UPDATE dispositivos.TotalArticulos SET TotalPedidos =TotalPedidos-@cant WHERE IdArticulo = @num_pro
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
 CREATE   TRIGGER [movimientos].[TR_ProductoEliminado] 
-
 on [movimientos].[CuerpoPedido] for delete 
-
 as 
-
 declare @pre_uni money, @cant int, @num_pro int, @num_pedi int 
-
 select @pre_uni = PrecioUnitario, @cant = Cantidad, @num_pro = NumProducto, @num_pedi = NumPedido from deleted 
-
 delete from movimientos.CabezaCuerpoP where PrecioUnitario = @pre_uni and Cantidad = @cant and NumPedido = @num_pedi and NumProducto = @num_pro
+UPDATE dispositivos.TotalArticulos SET TotalPedidos = TotalPedidos - @cant WHERE IdArticulo=@num_pro
 GO
 SET QUOTED_IDENTIFIER ON
 GO
