@@ -10,8 +10,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
-CREATE TRIGGER [dbo].[DeudorActualizado] 
+CREATE   TRIGGER [dbo].[DeudorActualizado] 
 
 on [dbo].[Deudor] for update 
 
@@ -27,8 +26,7 @@ BEGIN
 
 delete from Deudor where CodigoCliente = @cod_cli 
 
-END 
-
+END
 GO
 ALTER TABLE [dbo].[Deudor] ADD CONSTRAINT [Unique_Identifier7] PRIMARY KEY CLUSTERED  ([CodigoCliente]) ON [PRIMARY]
 GO

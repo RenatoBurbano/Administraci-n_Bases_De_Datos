@@ -13,9 +13,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
-
-CREATE TRIGGER [catalogo].[ClienteIngresado] 
+CREATE   TRIGGER [catalogo].[ClienteIngresado] 
 
 on [catalogo].[Cliente] for insert 
 
@@ -41,8 +39,7 @@ BEGIN
 
 PRINT 'entro en el else' 
 
-END 
-
+END
 GO
 ALTER TABLE [catalogo].[Cliente] ADD CONSTRAINT [Unique_Identifier1] PRIMARY KEY CLUSTERED  ([NumCliente]) ON [Secundario]
 GO

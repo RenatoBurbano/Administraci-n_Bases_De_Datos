@@ -11,8 +11,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
-CREATE TRIGGER [movimientos].[CabeceraPedidoIngresado] 
+CREATE   TRIGGER [movimientos].[CabeceraPedidoIngresado] 
 
 on [movimientos].[CabeceraPedido] for insert 
 
@@ -36,14 +35,13 @@ insert into Deudor values (@num_cli, @cod_gar, @lim_cred, 0)
 
 END 
 
-END 
-
+END
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE TRIGGER [movimientos].[TR_PedidoActualizado] 
+CREATE   TRIGGER [movimientos].[TR_PedidoActualizado] 
 
 on [movimientos].[CabeceraPedido] for update 
 
@@ -53,14 +51,13 @@ declare @num_pedi int, @fech_pedi datetime, @num_cli int
 
 select @num_pedi = NumPedido, @fech_pedi = FechaPedido, @num_cli = NumCliente from inserted 
 
-update movimientos.CabezaCuerpoP set FechaPedido = @fech_pedi where NumPedido = @num_pedi and NumCliente = @num_cli 
-
+update movimientos.CabezaCuerpoP set FechaPedido = @fech_pedi where NumPedido = @num_pedi and NumCliente = @num_cli
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-CREATE TRIGGER [movimientos].[TR_PedidoEliminado] 
+CREATE   TRIGGER [movimientos].[TR_PedidoEliminado] 
 
 on [movimientos].[CabeceraPedido] for delete 
 
@@ -70,17 +67,13 @@ declare @num_pedi int, @fech_pedi datetime, @num_cli int
 
 select @num_pedi = NumPedido, @fech_pedi = FechaPedido, @num_cli = NumCliente from deleted 
 
-delete from movimientos.CabezaCuerpoP where FechaPedido = @fech_pedi and  NumPedido = @num_pedi and NumCliente = @num_cli 
-
+delete from movimientos.CabezaCuerpoP where FechaPedido = @fech_pedi and  NumPedido = @num_pedi and NumCliente = @num_cli
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
-
- 
-
-CREATE TRIGGER [movimientos].[TR_PedidoInsertado] 
+CREATE   TRIGGER [movimientos].[TR_PedidoInsertado] 
 
 on [movimientos].[CabeceraPedido] for insert 
 
@@ -90,8 +83,7 @@ declare @num_pedi int, @fech_pedi datetime, @num_cli int
 
 select @num_pedi = NumPedido, @fech_pedi = FechaPedido, @num_cli = NumCliente from inserted 
 
-insert into movimientos.CabezaCuerpoP Values (@num_pedi,@fech_pedi,@num_cli,null,null,null) 
-
+insert into movimientos.CabezaCuerpoP Values (@num_pedi,@fech_pedi,@num_cli,null,null,null)
 GO
 ALTER TABLE [movimientos].[CabeceraPedido] ADD CONSTRAINT [CK_CabeceraPedido] CHECK (([TipoPed]='CREDITO' OR [TipoPEd]='CONTADO'))
 GO
