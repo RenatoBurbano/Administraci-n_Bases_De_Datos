@@ -1,7 +1,7 @@
 CREATE TABLE [catalogo].[Fabrica]
 (
 [NumFabrica] [int] NOT NULL,
-[Contacto] [varchar] (100) COLLATE Modern_Spanish_CI_AS NOT NULL,
+[Contacto] [varchar] (30) COLLATE Modern_Spanish_CI_AS NULL,
 [NombreFabrica] [varchar] (30) COLLATE Modern_Spanish_CI_AS NULL,
 [Telefono1] [varchar] (10) COLLATE Modern_Spanish_CI_AS NULL,
 [Telefono2] [varchar] (10) COLLATE Modern_Spanish_CI_AS NULL
